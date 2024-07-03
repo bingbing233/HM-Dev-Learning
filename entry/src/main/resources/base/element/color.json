@@ -3,6 +3,14 @@
     {
       "name": "start_window_background",
       "value": "#FFFFFF"
+    },
+    {
+      "name": "text_setting_item",
+      "value": "#f2000000"
+    },
+    {
+      "name": "xl_main",
+      "value": "#A365F3"
     }
   ]
 }
