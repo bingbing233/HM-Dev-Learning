@@ -47,6 +47,18 @@
           }
         ],
       }
+    ],
+    "requestPermissions": [
+      {
+        "name": "ohos.permission.INTERNET", // 权限名
+        "reason": "$string:permission_internet_reason", // 权限理由
+        "usedScene" : {
+          "abilities": [
+            "EntryAbility" // 使用场景
+          ],
+          "when": "inuse"// 何时使用该权限
+        }
+      }
     ]
   }
 }

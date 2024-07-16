@@ -11,6 +11,44 @@
     {
       "name": "xl_main",
       "value": "#A365F3"
+    },
+    {
+      "name": "black_trans_60",
+      "value": "#99000000"
+    },
+    {
+      "name": "bg_main",
+      "value": "#fefefe"
+    },
+    {
+      "name": "online_text",
+      "value": "#661A1A1A"
+    },
+    {
+      "name": "tag_text",
+      "value": "#CCFFFFFF"
+    },
+    {
+      "name": "tag_text_bg",
+      "value": "#1AFFFFFF"
+    },
+    {
+      "name": "black_trans_0",
+      "value": "#00FFFFFF"
+    },
+    {
+      "name": "black_trans_30",
+      "value": "#4D000000"
+    },
+    {
+      "name": "black",
+      "value": "#000000"
+    },{
+      "name": "black_trans_40",
+      "value": "#66000000"
+    },{
+      "name": "white",
+      "value": "#ffffff"
     }
   ]
 }

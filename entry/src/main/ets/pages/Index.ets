@@ -1,7 +1,9 @@
 import observer from '@ohos.arkui.observer';
 import { BottomTabTag } from '../const/const'; // import 类 from 文件
+import { httpTest } from '../http/Net';
 import { FragMine } from '../pages/FragMine'
 import { FragHome } from './FragHome';
+import { FragMsg } from './FragMsg';
 
 @Entry
 @Component
@@ -39,28 +41,25 @@ struct Index {
 
   build() {
     RelativeContainer() {
-      // Text(this.message)
-      //   .id('HelloWorld')
-      //   .fontSize(50)
-      //   .fontWeight(FontWeight.Bold)
-      //   .alignRules({
-      //     center: { anchor: '__container__', align: VerticalAlign.Center },
-      //     middle: { anchor: '__container__', align: HorizontalAlign.Center }
-      //   })
-      //   .onClick(() => {
-      //   })
       if (this.curItem == BottomTabTag.bottomTabMine) {
-        FragMine()
+        FragMine().alignRules({
+          bottom: { anchor: 'bottom_bar', align: VerticalAlign.Top }
+        })
       } else if (this.curItem == BottomTabTag.bottomTabHome) {
-        FragHome()
+        FragHome().alignRules({
+          bottom: { anchor: 'bottom_bar', align: VerticalAlign.Top },
+        })
       } else if (this.curItem == BottomTabTag.bottomTabMsg) {
-        FragHome()
+        FragMsg().alignRules({
+          bottom: { anchor: 'bottom_bar', align: VerticalAlign.Top }
+        })
       }
 
       BottomBar({ curItem: this.curItem })
         .alignRules({
           bottom: { anchor: '__container__', align: VerticalAlign.Bottom }
         })
+        .id('bottom_bar')
     }
     .height('100%')
     .width('100%')
@@ -73,20 +72,29 @@ struct BottomItem {
   image_nor: ResourceStr = ""
   @Link curItemTag: string
   tag: string = ""
+  itemName: string = ""
   onItemClick: (n: string) => void = () => {
   }
 
   build() {
-    if (this.curItemTag == this.tag) {
-      Image(this.image_sel).width(30).height(30).onClick(() => {
-        this.onItemClick(this.tag)
-        console.debug("click:" + this.tag)
-      })
-    } else {
-      Image(this.image_nor).width(30).height(30).onClick(() => {
-        this.onItemClick(this.tag)
-        console.debug("click:" + this.tag)
-      })
+    Column() {
+      if (this.curItemTag == this.tag) {
+        Image(this.image_sel).width(30).height(30).onClick(() => {
+          this.onItemClick(this.tag)
+          console.debug("click:" + this.tag)
+        })
+      } else {
+        Image(this.image_nor).width(30).height(30).onClick(() => {
+          this.onItemClick(this.tag)
+          console.debug("click:" + this.tag)
+        })
+      }
+
+      if (this.curItemTag == this.tag) {
+        Text(this.itemName).fontSize(12).fontColor($r('app.color.xl_main'))
+      } else {
+        Text(this.itemName).fontSize(12).fontColor($r('app.color.black_trans_30'))
+      }
     }
   }
 }
@@ -105,7 +113,9 @@ struct BottomBar {
         onItemClick: (tag: string) => {
           this.curItem = tag
           console.debug("out click = " + tag)
-        }
+          httpTest()
+        },
+        itemName: "首页"
       })
       BottomItem({
         image_sel: $r('app.media.ic_home_msg_sel'),
@@ -115,7 +125,8 @@ struct BottomBar {
         onItemClick: (tag: string) => {
           this.curItem = tag
           console.debug("out click = " + tag)
-        }
+        },
+        itemName: "消息"
       })
       BottomItem({
         image_sel: $r('app.media.ic_home_mine_sel'),
@@ -125,10 +136,13 @@ struct BottomBar {
         onItemClick: (tag: string) => {
           this.curItem = tag
           console.debug("out click = " + tag)
-        }
+        },
+        itemName: "我的"
       })
     }
     .width('100%')
+    .height(63)
+    .backgroundColor($r('app.color.white'))
     .justifyContent(FlexAlign.SpaceEvenly)
   }
 }
