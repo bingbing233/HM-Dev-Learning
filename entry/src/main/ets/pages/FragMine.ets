@@ -15,7 +15,7 @@ export struct FragMine {
       SettingItem({ iconRes: $r('app.media.ic_upage_feedback'), title: "联系客服" })
       SettingItem({ iconRes: $r('app.media.ic_upage_setting'), title: "设置" })
     }.width('100%')
-    .height('100%').margin({ top: 50 })
+    .height('100%')
   }
 }
 

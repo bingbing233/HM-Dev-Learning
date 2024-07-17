@@ -4,12 +4,14 @@ import { httpTest } from '../http/Net';
 import { FragMine } from '../pages/FragMine'
 import { FragHome } from './FragHome';
 import { FragMsg } from './FragMsg';
+import { window } from '@kit.ArkUI';
 
 @Entry
 @Component
 struct Index {
   @State curItem: string = BottomTabTag.bottomTabHome
   @State message: string = 'Hello World';
+  @State statusBarHeight: number = 0
   listener: (info: observer.RouterPageInfo) => void = (info: observer.RouterPageInfo) => {
     let routerInfo: observer.RouterPageInfo | undefined = this.queryRouterPageInfo()
     if (info.pageId == routerInfo?.pageId) {
@@ -32,6 +34,7 @@ struct Index {
   aboutToAppear(): void {
     let uiObserver = this.getUIContext().getUIObserver()
     uiObserver.on('routerPageUpdate', this.listener)
+    this.getStatusBarHeight() // 更新状态栏高度
   }
 
   aboutToDisappear(): void {
@@ -60,9 +63,19 @@ struct Index {
           bottom: { anchor: '__container__', align: VerticalAlign.Bottom }
         })
         .id('bottom_bar')
-    }
+    }.padding({ top: this.statusBarHeight * 2})
     .height('100%')
     .width('100%')
+  }
+
+  private getStatusBarHeight() {
+    window.getLastWindow(getContext(this), (error, topWindow) => {
+      if (topWindow) {
+        let area = topWindow.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM)
+        this.statusBarHeight = px2vp(area.topRect.height)
+        console.log("statusBar height = " + this.statusBarHeight)
+      }
+    })
   }
 }
 

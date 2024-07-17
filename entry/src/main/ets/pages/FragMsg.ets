@@ -12,15 +12,18 @@ export struct FragMsg {
       // 顶部tab
       Row() {
         MsgTab({ title: "消息", isSelect: this.curIndex == 0 }).margin({ left: 16 }).onClick(() => {
+          this.curIndex = 0
           this.ctl.changeIndex(0, true)
         })
         MsgTab({ title: "亲密用户", isSelect: this.curIndex == 1 }).margin({ left: 20 }).onClick(() => {
+          this.curIndex = 1
           this.ctl.changeIndex(1, true)
         })
         MsgTab({ title: "谁看过我", isSelect: this.curIndex == 2 }).margin({ left: 20 }).onClick(() => {
+          this.curIndex = 2
           this.ctl.changeIndex(2, true)
         })
-      }.width('100%').height(43).margin({ top: 45 })
+      }.width('100%').height(43)
 
       Swiper(this.ctl) {
         List() {
@@ -29,7 +32,7 @@ export struct FragMsg {
               MsgItem()
             }
           })
-        }.width('100%').height('100%')
+        }.width('100%').height('100%').scrollBarWidth(0)
 
         List() {
           ForEach(tempList, (item: string) => {
@@ -37,7 +40,7 @@ export struct FragMsg {
               MsgItem()
             }
           })
-        }.width('100%').height('100%')
+        }.width('100%').height('100%').scrollBarWidth(0)
 
         List() {
           ForEach(tempList, (item: string) => {
@@ -45,7 +48,7 @@ export struct FragMsg {
               MsgItem()
             }
           })
-        }.width('100%').height('100%')
+        }.width('100%').height('100%').scrollBarWidth(0)
       }.onChange((index) => {
         this.curIndex = index
       })
@@ -91,10 +94,13 @@ struct MsgTab {
   @Prop isSelect: boolean = true
 
   build() {
-    if (this.isSelect) {
-      Text(this.title).fontSize(22).fontColor($r('app.color.black'))
-    } else {
-      Text(this.title).fontSize(17).fontColor($r('app.color.black_trans_60'))
+    Column(){
+      if (this.isSelect) {
+        Text(this.title).fontSize(22).fontColor($r('app.color.black'))
+        Rect().radiusWidth(25).width(9).height(3).fill($r('app.color.xl_main'))
+      } else {
+        Text(this.title).fontSize(17).fontColor($r('app.color.black_trans_60'))
+      }
     }
   }
 }

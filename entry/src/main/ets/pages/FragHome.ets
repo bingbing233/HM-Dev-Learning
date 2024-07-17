@@ -7,7 +7,7 @@ const tempList: string[] =
 @Component
 export struct FragHome {
   private swiperController = new SwiperController()
-  @State curIndex:number = 0
+  @State curIndex: number = 0
 
   build() {
     Column() {
@@ -16,19 +16,23 @@ export struct FragHome {
 
       // tab
       Row() {
-        if(this.curIndex == 0){
+        if (this.curIndex == 0) {
           Text("热门").fontSize(18).fontColor($r('app.color.black')).onClick(() => {
-            this.swiperController.changeIndex(0,true)
+            this.curIndex = 0
+            this.swiperController.changeIndex(0, true)
           })
           Text("新人").fontSize(16).fontColor($r('app.color.black_trans_60')).margin({ left: 20 }).onClick(() => {
-            this.swiperController.changeIndex(1,true)
+            this.curIndex = 1
+            this.swiperController.changeIndex(1, true)
           })
         } else {
           Text("热门").fontSize(16).fontColor($r('app.color.black_trans_60')).onClick(() => {
-            this.swiperController.changeIndex(0,true)
+            this.curIndex = 0
+            this.swiperController.changeIndex(0, true)
           })
           Text("新人").fontSize(18).fontColor($r('app.color.black')).margin({ left: 20 }).onClick(() => {
-            this.swiperController.changeIndex(1,true)
+            this.curIndex = 1
+            this.swiperController.changeIndex(1, true)
           })
         }
 
@@ -38,29 +42,45 @@ export struct FragHome {
       Swiper(this.swiperController) {
         HomePage()
         HomePage()
-      }.width('100%').height('100%').indicator(false).loop(false).onChange((index)=>{
+      }
+      .width('100%')
+      .height('100%')
+      .indicator(false)
+      .loop(false)
+      .onChange((index) => {
         this.curIndex = index
       })
 
-    }.width('100%').alignItems(HorizontalAlign.Start).margin({ bottom: 63, top: 50 })
+    }.width('100%').alignItems(HorizontalAlign.Start).margin({ bottom: 63})
   }
 }
 
 @Component
 struct HomePage {
+  @State refreshing: boolean = false;
+
   build() {
-    // 列表
-    Grid() {
-      ForEach(tempList, (item: string) => {
-        GridItem() {
-          HomeRecItem()
-        }
-      })
-    }
-    .margin({ left: 12, right: 12, bottom: 10 })
-    .columnsGap(10)
-    .rowsGap(10)
-    .columnsTemplate("1fr 1fr") // 分成两份且均分
+    // 刷新
+    Refresh({ refreshing: this.refreshing }) {
+      // 列表
+      Grid() {
+        ForEach(tempList, (item: string) => {
+          GridItem() {
+            HomeRecItem()
+          }
+        })
+      }
+      .margin({ left: 12, right: 12, bottom: 10 })
+      .columnsGap(10)
+      .rowsGap(10)
+      .columnsTemplate("1fr 1fr") // 分成两份且均分
+    }.width('100%').onRefreshing(() => {
+      // do refresh job
+      this.refreshing = true
+      setTimeout(()=>{
+        this.refreshing = false
+      },3000)
+    })
   }
 }
 
