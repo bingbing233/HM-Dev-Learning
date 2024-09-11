@@ -1,5 +1,6 @@
-import { DrawContext } from '@kit.ArkUI'
+import { DrawContext, prompt, Prompt } from '@kit.ArkUI'
 import { drawing } from '@kit.ArkGraphics2D'
+import worker from '@ohos.worker';
 
 const tempList: string[] =
   ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",]
@@ -51,7 +52,7 @@ export struct FragHome {
         this.curIndex = index
       })
 
-    }.width('100%').alignItems(HorizontalAlign.Start).margin({ bottom: 63})
+    }.width('100%').alignItems(HorizontalAlign.Start).margin({ bottom: 63 })
   }
 }
 
@@ -77,9 +78,9 @@ struct HomePage {
     }.width('100%').onRefreshing(() => {
       // do refresh job
       this.refreshing = true
-      setTimeout(()=>{
+      setTimeout(() => {
         this.refreshing = false
-      },3000)
+      }, 3000)
     })
   }
 }
@@ -87,6 +88,8 @@ struct HomePage {
 @Preview
 @Component
 struct HomeRecItem {
+  @State rotation: number = 0
+
   build() {
     RelativeContainer() {
       Image($r('app.media.ic_home_rec_default')).borderRadius(12)
@@ -121,8 +124,30 @@ struct HomeRecItem {
         left: { anchor: 'tag_age', align: HorizontalAlign.End }
       }).margin({ left: 4 })
 
-    }.width('100%').height(192).borderRadius(12)
+    }
+    .width('100%')
+    .height(192)
+    .borderRadius(12)
+    .onClick(() => {
+      // 动画测试
+      animateTo({
+        duration: 300,
+        tempo: 1,
+        curve: Curve.Linear,
+        iterations: 1,
+        playMode: PlayMode.Normal,
+        onFinish: () => {
+          prompt.showToast({ message: "play finish" })
+          this.rotation = 0
+        }
+      }, () => {
+        this.rotation = 360
+      })
 
+    })
+    .rotate({
+      angle: this.rotation
+    })
   }
 }
 
@@ -183,7 +208,6 @@ class GreenDot extends DrawModifier {
       green: 255,
       blue: 0
     })
-    console.log(`w=${size.width} h=${size.height}`)
     drawContext.canvas.attachBrush(brush)
     drawContext.canvas.drawCircle(20, 12 * 3, 4)
   }

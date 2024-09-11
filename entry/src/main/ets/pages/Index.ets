@@ -1,11 +1,14 @@
 import observer from '@ohos.arkui.observer';
 import { BottomTabTag } from '../const/const'; // import 类 from 文件
-import { httpTest } from '../http/Net';
+import { httpRequestTest, httpTest } from '../http/Net';
 import { FragMine } from '../pages/FragMine'
 import { FragHome } from './FragHome';
 import { FragMsg } from './FragMsg';
 import { window } from '@kit.ArkUI';
+import worker from '@ohos.worker';
+import { TaskDemo } from '../task/task';
 
+const TAG = "binghao"
 @Entry
 @Component
 struct Index {
@@ -18,13 +21,16 @@ struct Index {
       // 生命周期事件
       switch (info.state) {
         case observer.RouterPageState.ON_PAGE_SHOW: {
+          console.log(`${TAG}:on_page_show`)
           break
         }
         case observer.RouterPageState.ON_PAGE_HIDE: {
+          console.log(`${TAG}:on_page_hide`)
           break
         }
         case observer.RouterPageState.ABOUT_TO_APPEAR: {
-
+          console.log(`${TAG}:about_to_appear`)
+          break
         }
       }
     }
@@ -63,7 +69,7 @@ struct Index {
           bottom: { anchor: '__container__', align: VerticalAlign.Bottom }
         })
         .id('bottom_bar')
-    }.padding({ top: this.statusBarHeight * 2})
+    }.padding({ top: this.statusBarHeight * 2 })
     .height('100%')
     .width('100%')
   }
@@ -126,7 +132,6 @@ struct BottomBar {
         onItemClick: (tag: string) => {
           this.curItem = tag
           console.debug("out click = " + tag)
-          httpTest()
         },
         itemName: "首页"
       })
@@ -149,6 +154,8 @@ struct BottomBar {
         onItemClick: (tag: string) => {
           this.curItem = tag
           console.debug("out click = " + tag)
+          // sendWorkMsg()
+          new TaskDemo().createTask()
         },
         itemName: "我的"
       })
@@ -158,4 +165,15 @@ struct BottomBar {
     .backgroundColor($r('app.color.white'))
     .justifyContent(FlexAlign.SpaceEvenly)
   }
+}
+
+export function sendWorkMsg() {
+  let tag = "Main Worker"
+  let url = 'entry/ets/worker/worker.ets';
+  let workerInstance: worker.ThreadWorker = new worker.ThreadWorker(url, { name: "worker_thread" }) // 创建worker实例
+  workerInstance.onmessage = (data) => { // 监听子线程消息
+    console.log(`${tag},data = ` + JSON.stringify(data));
+  }
+
+  workerInstance.postMessage("Hello sub thread,I am main thread")
 }
